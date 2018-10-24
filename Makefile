@@ -9,8 +9,6 @@ MDIR = $(PWD)
 
 all: 
 	$ make -C $(KDIR) M=$(MDIR) modules
-	$ clear 
-	$ echo "All Files build.."
 
 clean: 
 	$ make -C $(KDIR) M=$(MDIR) clean
