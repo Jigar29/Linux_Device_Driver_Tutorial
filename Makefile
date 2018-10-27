@@ -9,8 +9,10 @@ MDIR = $(PWD)
 
 all: 
 	$ make -C $(KDIR) M=$(MDIR) modules
+	$ gcc user_applicaion.c -o user_applicaion
 
 clean: 
 	$ make -C $(KDIR) M=$(MDIR) clean
+	$ rm user_applicaion 
 	$ clear
 	$ echo "cleaned.." 

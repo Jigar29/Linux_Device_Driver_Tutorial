@@ -4,6 +4,7 @@
 #include <linux/device.h>
 #include <linux/kernel.h>
 #include <linux/semaphore.h>
+#include <linux/errno.h>
 #include <linux/cdev.h>
 #include <linux/uaccess.h>              // This is used to access the user-space memory from the kernel space, since 
                                         // both the memory sections are different, accessing the user-space is a little bit 
@@ -17,7 +18,7 @@ MODULE_DESCRIPTION("Character device driver.");
 MODULE_VERSION("0.0"); 
 
 //Defining the local memory for reading and sriting operations
-static char device_buffer[100] = "Hello Kitty!!"; 
+static char device_buffer[100] = ""; 
 
 //Declaring the semaphor to be used for the device 
 struct semaphore device_semaphore = {0}; 
@@ -132,31 +133,34 @@ ssize_t readFromDevice (struct file *fptr, char __user *dest_buffer, size_t byte
 {
     // Reading the given number of bytes from the device
     // Static __always_inline unsigned long copy_to_user(void __user *to, const void *from, unsigned long n)
-    printk(KERN_ALERT"Reading from the device"); 
+
     return_val = copy_to_user(dest_buffer, device_buffer, bytes_to_read);
 
     //Some error checks 
     if(!return_val)
     {
-        printk(KERN_ALERT"All the data read successfully %s", dest_buffer); 
+        printk(KERN_ALERT"All the data read successfully %s", device_buffer);
+        cur_pos += bytes_to_read;  
         return bytes_to_read; 
     }
-    return return_val; 
+    return 0; 
 }
 ssize_t writeToDevice (struct file *fptr, const char __user *source_buffer, size_t bytes_to_write, loff_t *cur_pos)
 {
     // Writting the number of bytes to the device 
     // static inline unsigned long copy_from_user(void *to, const void __user *from, unsigned long n)
 
-    printk(KERN_ALERT"Message to be written i \n%s\n", source_buffer); 
-    // return_val = copy_from_user(&device_buffer[0], source_buffer, bytes_to_write); 
+    printk(KERN_ALERT"Came into the write function");
+    
+    return_val = copy_from_user(device_buffer, source_buffer, bytes_to_write); 
 
-    // if(return_val >=0)
-    // {
-    //     printk(KERN_ALERT"Wrote the value to the device");
-    // }
-
-    return 1; 
+    if(!return_val)
+    {
+        printk(KERN_ALERT"The char received is %s", device_buffer); 
+        cur_pos += bytes_to_write; 
+        return bytes_to_write; 
+    } 
+    return 0;  
 }
 int closeTheDevice (struct inode *node, struct file *fptr)
 {

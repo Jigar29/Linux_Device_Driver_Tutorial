@@ -10,7 +10,7 @@ int main()
 {
     int file_descriptor; 
     char op; 
-    char read_buffer[100]= "", write_buffer[100]="Hello Kitty"; 
+    char read_buffer[100]= "", write_buffer[100]="Hello World"; 
     // Let's open the device first
     file_descriptor = open(DEVICE, O_RDWR);
     
@@ -24,10 +24,10 @@ int main()
     
     // printf("Please Enter the text to write to the device\n");
     // scanf("%s", &write_buffer[0]);
-    //write(file_descriptor, &write_buffer[0], strlen(write_buffer));
+    write(file_descriptor, &write_buffer[0], strlen(write_buffer)+1);
     
-    read(file_descriptor, &read_buffer[0], 10);
-    printf("The text read is : %s\n",read_buffer);
+    read(file_descriptor, &read_buffer[0], strlen(write_buffer)+1);
+    printf("Data received is : %s\n", read_buffer);
 
     close(file_descriptor);
     return 0; 
