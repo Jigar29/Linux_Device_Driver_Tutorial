@@ -86,7 +86,7 @@ static int __init module_initialization(void)
     return_val = cdev_add(char_device, device_registration, 1); 
     if(return_val < 0)
     {
-        printk(KERN_ALERT"static inline void sema_init(struct semaphore *sem, int val)The Device can not be added to the kernel at this point.. Please try again later"); 
+        printk(KERN_ALERT"The Device can not be added to the kernel at this point.. Please try again later"); 
         printk(KERN_ALERT"Unregistering the device numbers from the kernel table..."); 
         // extern void unregister_chrdev_region(dev_t, unsigned);
         unregister_chrdev_region(device_registration, 1); 
@@ -98,6 +98,7 @@ static int __init module_initialization(void)
     // threads writting to this file at the same time 
     // static inline void sema_init(struct semaphore *sem, int val); 
     sema_init(&device_semaphore, 1); 
+    
     return return_val; 
 }
 

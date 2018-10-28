@@ -2,6 +2,7 @@
 obj-m := lcd_driver.o
 obj-m += keypad_driver.o
 obj-m += solid_chardev_driver.o
+obj-m += usb_block_driver.o 
 
 #Make file build operations 
 KDIR = /lib/modules/`uname -r`/build/
